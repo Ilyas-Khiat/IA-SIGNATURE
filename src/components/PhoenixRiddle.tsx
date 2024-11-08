@@ -20,7 +20,7 @@ interface VerifyResponseModel {
   question: string;
 }
 
-const API_BASE_URL = "http://localhost:8000"; // Replace with your API base URL
+const API_BASE_URL = 'https://ia-signature-ia-back.hf.space'; // Replace with your API base URL
 
 const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
   isVisible,

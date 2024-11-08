@@ -121,7 +121,7 @@ export default function Chat() {
       const assistantMessageId = uuidv4();
       setCurrentAssistantMessageId(assistantMessageId);
 
-      const apiUrl = 'http://localhost:8000/generate'; // Replace with your API URL
+      const apiUrl = 'https://ia-signature-ia-back.hf.space/generate'; // Replace with your API URL
 
       try {
         const response = await fetch(apiUrl, {
