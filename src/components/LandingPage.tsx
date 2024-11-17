@@ -36,7 +36,7 @@ const LandingPage: React.FC = () => {
   const handleAnswerSubmit = (isCorrect: boolean) => {
     if (isCorrect) {
       // Navigate to the next page upon correct answer
-      navigate("/chat");
+      navigate("/conversation");
     }
     // No need to handle incorrect answers here since PhoenixRiddle handles it
   };

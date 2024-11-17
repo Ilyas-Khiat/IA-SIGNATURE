@@ -1,20 +1,28 @@
 // src/App.tsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Quiz from "./components/Quiz";
 import LandingPage from "./components/LandingPage";
-import ResultsPage from "./components/ResultsPage";
 import Chat from "./components/Chat";
+import Navigation from "./components/Navigation";
+import ArtGalleryWithPopup from "./components/ArtGalleryWithPopup";
+import ArtGalleryTristan from "./components/ArtGalleryTristan";
 
 const App: React.FC = () => {
   return (
     <Routes>
+      {/* Routes without navigation */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/chat" element={<Chat/>} />
-      {/* <Route path="/home" element={<LandingPage />} /> */}
+
+      {/* Routes with navigation */}
+      <Route element={<Navigation />} >
+        <Route path="/conversation" element={<Chat />} />
+        <Route path="/magritte" element={<ArtGalleryWithPopup />} />
+        <Route path="/tristan" element={<ArtGalleryTristan />} />
+        {/* Add other routes that should include the navigation here */}
+      </Route>
     </Routes>
-  
   );
 };
 
 export default App;
+

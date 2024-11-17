@@ -11,10 +11,10 @@ const ResultsPage: React.FC = () => {
         transition={{ duration: 1 }}
       >
         <h1 className="text-5xl font-serif text-amber-100 mb-6">
-          Thank You!
+          Pas encore disponible
         </h1>
         <p className="text-xl text-amber-50/80">
-          Your journey with the Phoenix begins now.
+          cette page est en cours de construction
         </p>
       </motion.div>
     </div>

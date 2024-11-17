@@ -1,7 +1,7 @@
 // src/components/PhoenixRiddle.tsx
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, RefreshCw } from "lucide-react"; // Import the refresh icon
 import axios from "axios";
 
 interface PhoenixRiddleProps {
@@ -31,24 +31,26 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState<string>("");
 
+  // Extracted fetchQuestion function
+  const fetchQuestion = async () => {
+    try {
+      setCurrentRiddle("");
+      const response = await axios.post<SphinxQuestion>(
+        `${API_BASE_URL}/generate_sphinx`
+      );
+      setCurrentRiddle(response.data.question);
+      setAnswers(response.data.answers);
+      setAnswer("");
+      setError("");
+    } catch (err) {
+      console.error("Error fetching sphinx question:", err);
+      setError("Erreur lors du chargement de la question. Veuillez réessayer.");
+    }
+  };
+
   // Fetch the sphinx question when the component is visible
   useEffect(() => {
     if (isVisible) {
-      const fetchQuestion = async () => {
-        try {
-          const response = await axios.post<SphinxQuestion>(
-            `${API_BASE_URL}/generate_sphinx`
-          );
-          setCurrentRiddle(response.data.question);
-          setAnswers(response.data.answers);
-          setAnswer("");
-          setError("");
-        } catch (err) {
-          console.error("Error fetching sphinx question:", err);
-          setError("Erreur lors du chargement de la question. Veuillez réessayer.");
-        }
-      };
-
       fetchQuestion();
     }
   }, [isVisible]);
@@ -75,25 +77,22 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
 
       if (response.data.score) {
         // Answer is correct
-        //wait for 2 seconds with a bravo message
         setError("Bravo ! IA SIGNATURE vous félicite. Vous avez bien compris le sens du récit");
         setTimeout(() => {
           onAnswerSubmit(true);
-        }, 2000);
-
+        }, 7000);
       } else {
         // Answer is incorrect
-        setError("IA SIGNATURE vous recommande de relire la nouvelle afin de mieux comprends le sens du récit");
-        // delete error after 5 seconds
+        setError("IA SIGNATURE vous recommande de relire la nouvelle afin de mieux comprendre le sens du récit");
         setTimeout(() => {
           setError("");
-        }, 2000);
-        console.log("the correct answer is: ", answers);
+        }, 7000);
+        console.log("The correct answer is:", answers);
         onAnswerSubmit(false);
       }
     } catch (err) {
       console.error("Error verifying answer:", err);
-      setError("Failed to verify the answer. Please try again.");
+      setError("Échec de la vérification de la réponse. Veuillez réessayer.");
     }
   };
 
@@ -108,7 +107,9 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
           transition={{ duration: 0.5 }}
           className="text-lg md:text-xl max-w-2xl mx-auto text-amber-50/80 italic"
         >
-          <p className="text-3xl mb-4">"{currentRiddle || "Génération de la question..."}"</p>
+          <p className="text-3xl mb-4">
+            "{currentRiddle || "Génération de la question..."}"
+          </p>
           {error && (
             <p className="mb-4 text-blue-400 text-center">{error}</p>
           )}
@@ -117,7 +118,6 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
             onSubmit={handleSubmit}
             className="flex items-center justify-center mt-4"
           >
-           
             <input
               type="text"
               value={answer}
@@ -134,8 +134,17 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
               <Send size={24} />
             </button>
           </form>
+          {/* Refresh icon button */}
+          <div className="flex items-center justify-center mt-4">
+            <button
+              onClick={fetchQuestion}
+              className="text-amber-50 hover:text-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-300"
+              aria-label="Refresh question"
+            >
+              <RefreshCw size={24} />
+            </button>
+          </div>
         </motion.div>
-
       )}
     </AnimatePresence>
   );
