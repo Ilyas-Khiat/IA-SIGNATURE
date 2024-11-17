@@ -59,7 +59,7 @@ export default function Chat() {
       id: uuidv4(),
       role: 'assistant',
       content:
-        "Salutations, je suis l'IA signature de Magritte. Posez-moi une question et je vous répondrai.",
+        "Salutations, je suis l'IA signature du récit d'anticipation. Posez-moi une question et je vous répondrai.",
     },
   ]);
   const [input, setInput] = useState('');
@@ -185,7 +185,7 @@ export default function Chat() {
     <div className="flex flex-col h-screen bg-gradient-to-b from-zinc-900 to-zinc-800 text-zinc-100">
       <header className="p-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-700 flex-none">
         <h1 className="text-2xl md:text-3xl font-serif text-center text-amber-300">
-          IA SIGNATURE de Magritte
+          IA SIGNATURE du Récit d'anticipation
         </h1>
       </header>
 
