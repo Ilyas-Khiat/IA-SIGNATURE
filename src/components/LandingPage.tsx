@@ -81,7 +81,7 @@ const LandingPage: React.FC = () => {
       <br />
       <br />
       <h1 className="text-xl md:text-5xl font-serif text-center text-amber-100">
-            Limites de l'imaginaire ou limites planétaires ?
+            La confession muette
           </h1>
       <div className="container mx-auto px-1 py-20 relative z-10 text-center">
         {/* Image Section */}
@@ -171,7 +171,7 @@ const LandingPage: React.FC = () => {
           className="mt-12 text-sm text-amber-50"
         >
           <p>
-            Auteur Laurent TRIPIED.
+            Auteur Gaspard Boréal.
           </p>
           <p>
             Conception et développement Laurent TRIPIED et Ilyas KHIAT.
