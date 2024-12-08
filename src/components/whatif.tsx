@@ -1,4 +1,4 @@
-// src/components/Chat.tsx
+// src/components/whatif.tsx
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, ChevronDown } from 'lucide-react';
@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { v4 as uuidv4 } from 'uuid';
 import ReactMarkdown from 'react-markdown';
+import { useLocation } from 'react-router-dom';
 
 interface Message {
   id: string;
@@ -46,26 +47,44 @@ const ExpandingTextarea = ({
       value={value}
       onChange={onChange}
       onKeyDown={handleKeyDown}
-      placeholder="Ask the Phoenix..."
+      placeholder="Proposez une suite ou posez une question..."
       className="w-full resize-none overflow-hidden bg-zinc-700 text-zinc-100 placeholder-zinc-400 border-zinc-600 focus:border-amber-500 focus:ring-amber-500 rounded-md p-2 min-h-[40px] max-h-[120px]"
       rows={1}
     />
   );
 };
 
-export default function Chat() {
+export default function WhatIf() {
+  const location = useLocation();
+  const { question, answer } = location.state || {};
+  const sphinxQuestion = question || "NOT_PROVIDED"; ;
+  const sphinxAnswer = answer || "NOT_PROVIDED";
+
+  const initialAssistantMessage = `✨ **Bienvenue** dans l’espace *“Et si …”* de l’**IA SIGNATURE** associée au récit *“La conversation muette”* 🎭
+\n\n
+Tu viens de répondre à la question :  
+❓ **${sphinxQuestion}**
+\n\n
+Ta réponse juste était :  
+✅ **${sphinxAnswer}**
+\n\n
+💡 Et si cet instant révélait des chemins insoupçonnés pour le récit ? ✨  
+➡️ *Que veux-tu explorer maintenant ?*`;
+
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: uuidv4(),
       role: 'assistant',
-      content:
-        "Salutations, je suis l'IA signature du récit d'anticipation. Posez-moi une question et je vous répondrai.",
+      content: initialAssistantMessage,
     },
   ]);
+
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
   const [assistantMessageContent, setAssistantMessageContent] = useState('');
   const [currentAssistantMessageId, setCurrentAssistantMessageId] = useState<string | null>(null);
+  const [isLoadingAlternatives, setIsLoadingAlternatives] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
 
@@ -121,14 +140,14 @@ export default function Chat() {
       const assistantMessageId = uuidv4();
       setCurrentAssistantMessageId(assistantMessageId);
 
-      const apiUrl = 'https://ia-signature-ia-back.hf.space/generate'; // Replace with your API URL
+      // Change to your backend endpoint
+      const apiUrl = 'https://ia-signature-ia-back.hf.space/whatif_chat';
 
       try {
         const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${apiKey}`, // Uncomment if using an API key
           },
           body: JSON.stringify({
             query: input,
@@ -137,9 +156,6 @@ export default function Chat() {
           }),
         });
 
-        console.log('history', currentMessages);
-
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -147,7 +163,7 @@ export default function Chat() {
         const reader = response.body?.getReader();
         const decoder = new TextDecoder('utf-8');
         let done = false;
-        let assistantContent = ''; // Local variable to accumulate response
+        let assistantContent = '';
 
         while (!done) {
           const { value, done: doneReading } = await reader!.read();
@@ -159,7 +175,6 @@ export default function Chat() {
           }
         }
 
-        // After streaming is done, add the assistant's message to messages
         setMessages((prev) => [
           ...prev,
           { id: assistantMessageId, role: 'assistant', content: assistantContent },
@@ -174,7 +189,7 @@ export default function Chat() {
             id: uuidv4(),
             role: 'assistant',
             content:
-              'Apologies, but it seems the cosmic energies are disturbed. Please try again later.',
+              'Désolé, quelque chose ne va pas. Réessayez plus tard.',
           },
         ]);
       } finally {
@@ -184,11 +199,79 @@ export default function Chat() {
     }
   };
 
+  const handleDiscoverAlternatives = async () => {
+    setIsLoadingAlternatives(true);
+
+    // Replace with your backend endpoint for what-if alternatives
+    const apiUrl = 'https://ia-signature-ia-back.hf.space/whatif';
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: sphinxQuestion, answer: sphinxAnswer }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const newMessages: Message[] = [{
+        id: uuidv4(),
+        role: 'assistant',
+        content: data, // Treat it as the content directly
+      }];
+
+      setMessages((prev) => [...prev, ...newMessages]);
+      scrollToBottom(true);
+    } catch (error: any) {
+      console.error('Error fetching alternatives:', error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: uuidv4(),
+          role: 'assistant',
+          content: "Désolé, je ne peux pas fournir d'autres alternatives pour le moment.",
+        },
+      ]);
+    } finally {
+      setIsLoadingAlternatives(false);
+    }
+  };
+
+  const handleProposeOwnContinuation = () => {
+    // Here you might prompt user or just show a message
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: uuidv4(),
+        role: 'assistant',
+        content:
+          "Propose ta propre suite. Qu'imagines-tu comme tournant inattendu dans l'histoire ? Partage-le ci-dessous.",
+      },
+    ]);
+    scrollToBottom(true);
+  };
+
+  const handleContinueOriginalStory = () => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: uuidv4(),
+        role: 'assistant',
+        content:
+          "Très bien, continuons l'histoire telle qu'elle a été imaginée par l'auteur...",
+      },
+    ]);
+    scrollToBottom(true);
+  };
+
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-zinc-900 to-zinc-800 text-zinc-100">
       <header className="p-4 bg-zinc-800/50 backdrop-blur-sm border-b border-zinc-700 flex-none">
         <h1 className="text-2xl md:text-3xl font-serif text-center text-amber-300">
-          IA SIGNATURE du Récit d'anticipation
+          IA SIGNATURE - Et si...
         </h1>
       </header>
 
@@ -197,7 +280,7 @@ export default function Chat() {
           <ScrollArea className="h-full p-4" ref={scrollAreaRef}>
             <div className="max-w-2xl mx-auto space-y-6 pb-20">
               <AnimatePresence initial={false}>
-                {messages.map((message) => (
+                {messages.map((message, index) => (
                   <motion.div
                     key={message.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -225,7 +308,34 @@ export default function Chat() {
                       }`}
                     >
                       {message.role === 'assistant' ? (
-                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                        <>
+                          <ReactMarkdown>{message.content}</ReactMarkdown>
+                          {index === 0 && (
+                            <div className="mt-4 flex flex-col space-y-2">
+                              <Button
+                                onClick={handleDiscoverAlternatives}
+                                className="bg-amber-600 hover:bg-amber-700 text-zinc-100 border-amber-500"
+                                disabled={isLoadingAlternatives}
+                              >
+                                {isLoadingAlternatives
+                                  ? 'Chargement...'
+                                  : "Découvrir d’autres alternatives"}
+                              </Button>
+                              <Button
+                                onClick={handleProposeOwnContinuation}
+                                className="bg-amber-600 hover:bg-amber-700 text-zinc-100 border-amber-500"
+                              >
+                                Proposer ta propre suite
+                              </Button>
+                              <Button
+                                onClick={handleContinueOriginalStory}
+                                className="bg-amber-600 hover:bg-amber-700 text-zinc-100 border-amber-500"
+                              >
+                                Poursuivre l’histoire originale
+                              </Button>
+                            </div>
+                          )}
+                        </>
                       ) : (
                         message.content
                       )}

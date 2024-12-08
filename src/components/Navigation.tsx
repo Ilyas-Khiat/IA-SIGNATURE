@@ -14,6 +14,7 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
+  ImagePlusIcon
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -21,12 +22,14 @@ import { Link, useLocation } from 'react-router-dom' // Import Link and useLocat
 import { Outlet } from 'react-router-dom' // Import Outlet
 
 const menuItems = [
+  { icon: Sparkles, label: 'What If', href: '/whatif' },
   { icon: MessageSquare, label: 'Conversation IA', href: '/conversation' },
   { icon: ImageIcon, label: 'Tableaux de Tristan', href: '/tristan' },
-  { icon: ImageIcon, label: 'Tableaux de Magritte', href: '/magritte' },
-  { icon: Users, label: 'Personnages du récit', href: '/personnages' },
-  { icon: Calendar, label: 'Prochains événements', href: '/evenements' },
-  { icon: Sparkles, label: 'Explorer IA SIGNATURE', href: '/explorer' },
+  { icon: ImagePlusIcon , label: 'Tableaux de Magritte', href: '/magritte' },
+  // { icon: Users, label: 'Personnages du récit', href: '/personnages' },
+  // { icon: Calendar, label: 'Prochains événements', href: '/evenements' },
+  // { icon: Sparkles, label: 'Explorer IA SIGNATURE', href: '/explorer' },
+  
 ]
 
 export default function Navigation() {

@@ -6,6 +6,7 @@ import Chat from "./components/Chat";
 import Navigation from "./components/Navigation";
 import ArtGalleryWithPopup from "./components/ArtGalleryWithPopup";
 import ArtGalleryTristan from "./components/ArtGalleryTristan";
+import WhatIf from "./components/whatif";
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <Route path="/conversation" element={<Chat />} />
         <Route path="/magritte" element={<ArtGalleryWithPopup />} />
         <Route path="/tristan" element={<ArtGalleryTristan />} />
+        <Route path="/whatif" element={<WhatIf />} />
         {/* Add other routes that should include the navigation here */}
       </Route>
     </Routes>

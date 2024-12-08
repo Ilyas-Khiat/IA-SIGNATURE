@@ -6,7 +6,7 @@ import axios from "axios";
 
 interface PhoenixRiddleProps {
   isVisible: boolean;
-  onAnswerSubmit: (isCorrect: boolean) => void;
+  onAnswerSubmit: (isCorrect: boolean, question: string, answer: string) => void;
 }
 
 interface SphinxQuestion {
@@ -75,11 +75,13 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
         verifyData
       );
 
+      console.log("Response from verify_sphinx:", response.data);
+
       if (response.data.score) {
         // Answer is correct
         setError("Bravo ! IA SIGNATURE vous félicite. Vous avez bien compris le sens du récit");
         setTimeout(() => {
-          onAnswerSubmit(true);
+          onAnswerSubmit(true, currentRiddle, answer);
         }, 7000);
       } else {
         // Answer is incorrect
@@ -88,7 +90,7 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
           setError("");
         }, 7000);
         console.log("The correct answer is:", answers);
-        onAnswerSubmit(false);
+        onAnswerSubmit(false, currentRiddle, answer);
       }
     } catch (err) {
       console.error("Error verifying answer:", err);

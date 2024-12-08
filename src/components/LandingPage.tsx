@@ -33,12 +33,15 @@ const LandingPage: React.FC = () => {
   const [showRiddle, setShowRiddle] = useState(false);
   const navigate = useNavigate();
 
-  const handleAnswerSubmit = (isCorrect: boolean) => {
+  const handleAnswerSubmit = (isCorrect: boolean, question: string, answer: string) => {
     if (isCorrect) {
-      // Navigate to the next page upon correct answer
-      navigate("/conversation");
+      navigate("/whatif", {
+        state: {
+          question,
+          answer
+        }
+      });
     }
-    // No need to handle incorrect answers here since PhoenixRiddle handles it
   };
 
   return (
