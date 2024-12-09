@@ -80,6 +80,9 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
       if (response.data.score) {
         // Answer is correct
         setError("Bravo ! IA SIGNATURE vous félicite. Vous avez bien compris le sens du récit");
+        localStorage.setItem('riddleQuestion', currentRiddle);
+        localStorage.setItem('riddleAnswer', answer);
+        
         setTimeout(() => {
           onAnswerSubmit(true, currentRiddle, answer);
         }, 7000);

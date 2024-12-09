@@ -57,8 +57,9 @@ const ExpandingTextarea = ({
 export default function WhatIf() {
   const location = useLocation();
   const { question, answer } = location.state || {};
-  const sphinxQuestion = question || "NOT_PROVIDED"; ;
-  const sphinxAnswer = answer || "NOT_PROVIDED";
+  const sphinxQuestion = question ||  localStorage.getItem('riddleQuestion');
+  const sphinxAnswer = answer ||  localStorage.getItem('riddleAnswer');
+  
 
   const initialAssistantMessage = `✨ **Bienvenue** dans l’espace *“Et si …”* de l’**IA SIGNATURE** associée au récit *“La conversation muette”* 🎭
 \n\n
@@ -194,6 +195,28 @@ Ta réponse juste était :
         ]);
       } finally {
         setIsStreaming(false);
+        //add a final message 
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: uuidv4(),
+            role: 'assistant',
+            content:
+              "Merci pour ta contribution ! Nous l’envoyons dès à présent à l’auteur Gaspard Boréal qui va l’étudier avec attention. 📚",
+          },
+          // Append the buttons message
+          {
+            id: uuidv4(),
+            role: 'assistant',
+            content: "Essayez les autres options", // No text content needed
+            type: 'buttons',
+            buttons: [
+              { label: "Découvrir d’autres alternatives", action: "discoverAlternatives" },
+              { label: "Proposer ta propre suite", action: "proposeOwnContinuation" },
+              { label: "Poursuivre l’histoire originale", action: "continueOriginalStory" },
+            ],
+          },
+        ]);
         scrollToBottom(true);
       }
     }
@@ -307,10 +330,11 @@ Ta réponse juste était :
                           : 'bg-zinc-700/50 text-zinc-100 border border-zinc-600/30'
                       }`}
                     >
+                      
                       {message.role === 'assistant' ? (
                         <>
                           <ReactMarkdown>{message.content}</ReactMarkdown>
-                          {index === 0 && (
+                          { (index === 0 || message.content == 'Essayez les autres options') && (
                             <div className="mt-4 flex flex-col space-y-2">
                               <Button
                                 onClick={handleDiscoverAlternatives}
