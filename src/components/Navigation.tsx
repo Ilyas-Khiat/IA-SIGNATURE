@@ -27,7 +27,7 @@ const menuItems = [
   { icon: MessageSquare, label: 'Conversation IA', href: '/conversation' },
   { icon: ImageIcon, label: 'Tableaux de Tristan', href: '/tristan' },
   { icon: ImagePlusIcon , label: 'Tableaux de Magritte', href: '/magritte' },
-  { icon: GitGraphIcon, label: 'Knowledge Graph', href: '/knowledge_graph' },
+  { icon: GitGraphIcon, label: 'Graphe de connaissances', href: '/knowledge_graph' },
   // { icon: Users, label: 'Personnages du récit', href: '/personnages' },
   // { icon: Calendar, label: 'Prochains événements', href: '/evenements' },
   // { icon: Sparkles, label: 'Explorer IA SIGNATURE', href: '/explorer' },

@@ -91,7 +91,7 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
         setError("IA SIGNATURE vous recommande de relire la nouvelle afin de mieux comprendre le sens du récit");
         setTimeout(() => {
           setError("");
-        }, 7000);
+        }, 3000);
         console.log("The correct answer is:", answers);
         onAnswerSubmit(false, currentRiddle, answer);
       }
