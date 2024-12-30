@@ -85,13 +85,13 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
         
         setTimeout(() => {
           onAnswerSubmit(true, currentRiddle, answer);
-        }, 7000);
+        }, 3000);
       } else {
         // Answer is incorrect
         setError("IA SIGNATURE vous recommande de relire la nouvelle afin de mieux comprendre le sens du récit");
         setTimeout(() => {
           setError("");
-        }, 3000);
+        }, 7000);
         console.log("The correct answer is:", answers);
         onAnswerSubmit(false, currentRiddle, answer);
       }
