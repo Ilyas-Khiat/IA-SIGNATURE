@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, RefreshCw } from "lucide-react"; // Import the refresh icon
 import axios from "axios";
+import { track } from '@vercel/analytics'; 
 
 interface PhoenixRiddleProps {
   isVisible: boolean;
@@ -82,11 +83,13 @@ const PhoenixRiddle: React.FC<PhoenixRiddleProps> = ({
         setError("Bravo ! IA SIGNATURE vous félicite. Vous avez bien compris le sens du récit");
         localStorage.setItem('riddleQuestion', currentRiddle);
         localStorage.setItem('riddleAnswer', answer);
+        track('sphinx', { question: currentRiddle, answer: answer, correct: true });
         
         setTimeout(() => {
           onAnswerSubmit(true, currentRiddle, answer);
         }, 3000);
       } else {
+        track('sphinx', { question: currentRiddle, answer: answer, correct: false });
         // Answer is incorrect
         setError("IA SIGNATURE vous recommande de relire la nouvelle afin de mieux comprendre le sens du récit");
         setTimeout(() => {

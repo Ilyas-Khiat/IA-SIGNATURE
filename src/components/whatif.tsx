@@ -10,7 +10,6 @@ import { v4 as uuidv4 } from 'uuid';
 import ReactMarkdown from 'react-markdown';
 import { useLocation } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { data } from 'autoprefixer';
 
 interface Message {
   id: string;
@@ -61,7 +60,6 @@ export default function WhatIf() {
   const { question, answer } = location.state || {};
   const sphinxQuestion = question ||  localStorage.getItem('riddleQuestion');
   const sphinxAnswer = answer ||  localStorage.getItem('riddleAnswer');
-  track('whatif', { question: sphinxQuestion, answer: sphinxAnswer });
   
 
   const initialAssistantMessage = `✨ **Bienvenue** dans l’espace *“Et si …”* de l’**IA SIGNATURE** associée au récit *“La conversation muette”* 🎭
@@ -226,7 +224,7 @@ Ta réponse juste était :
   };
 
   const handleDiscoverAlternatives = async () => {
-    track('whatif_discover_alternatives');
+    track('whatif', { action: 'discover_alternatives' });
     setIsLoadingAlternatives(true);
 
     // Replace with your backend endpoint for what-if alternatives
@@ -269,7 +267,7 @@ Ta réponse juste était :
   };
 
   const handleProposeOwnContinuation = () => {
-    track('whatif_propose_own_continuation');
+    track('whatif', { action: 'propose_own_continuation' });
     // Here you might prompt user or just show a message
     setMessages((prev) => [
       ...prev,
@@ -284,7 +282,7 @@ Ta réponse juste était :
   };
 
   const handleContinueOriginalStory = () => {
-    track('whatif_continue_original_story');
+    track('whatif', { action: 'continue_original_story' });
     setMessages((prev) => [
       ...prev,
       {
