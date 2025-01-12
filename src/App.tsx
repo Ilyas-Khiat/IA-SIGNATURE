@@ -25,7 +25,6 @@ const App: React.FC = () => {
         <Route path="/knowledge_graph" element={<KnowledgeGraph />} /> {/* New Route */}
         {/* Add other routes that should include the navigation here */}
       </Route>
-      <Analytics />
     </Routes>
     
   );
