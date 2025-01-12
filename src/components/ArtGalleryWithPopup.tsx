@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import { track } from '@vercel/analytics';
 
 interface Artwork {
   name: string;
@@ -82,7 +83,7 @@ export default function ArtGalleryWithPopup() {
               >
                 <Card
                   className="overflow-hidden bg-zinc-800 border border-zinc-700 hover:border-amber-500 transition-all cursor-pointer"
-                  onClick={() => setSelectedArtwork(artwork)}
+                  onClick={() => { setSelectedArtwork(artwork); track('artwork_rene_magritte', { artwork: artwork.name }); }}
                 >
                   <CardContent className="p-0">
                     <div
