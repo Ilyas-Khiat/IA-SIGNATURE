@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { track } from '@vercel/analytics';
 import {
   Dialog,
   DialogContent,
@@ -82,7 +83,7 @@ export default function ArtGalleryTristan() {
               >
                 <Card
                   className="overflow-hidden bg-zinc-800 border border-zinc-700 hover:border-amber-500 transition-all cursor-pointer"
-                  onClick={() => setSelectedArtwork(artwork)}
+                  onClick={() => {setSelectedArtwork(artwork); console.log(artwork) ; track("artwork_tristan", { artwork: artwork.name })}}
                 >
                   <CardContent className="p-0">
                     <div
