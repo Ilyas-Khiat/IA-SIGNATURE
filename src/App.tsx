@@ -8,6 +8,7 @@ import ArtGalleryWithPopup from "./components/ArtGalleryWithPopup";
 import ArtGalleryTristan from "./components/ArtGalleryTristan";
 import WhatIf from "./components/whatif";
 import KnowledgeGraph from "./components/KnowledgeGraph"; // Import the new component
+import { Analytics } from '@vercel/analytics/next';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         {/* Add other routes that should include the navigation here */}
       </Route>
     </Routes>
+    <Analytics />
   );
 };
 
